@@ -1,6 +1,7 @@
 import {
   Button,
   HStack,
+  Heading,
   Image,
   List,
   ListItem,
@@ -24,34 +25,41 @@ const GenreList = ({ onSelectGenre, selectedGenre }: Props) => {
 
   if (error) return null;
   return (
-    <List>
-      {isLoading &&
-        skeletons.map((skeleton) => (
-          <GameCardContainer key={skeleton}>
-            <GameCardSkeleton height={0} />
-          </GameCardContainer>
+    <>
+      <Heading fontSize="2xl" marginBottom={4}>
+        Genres
+      </Heading>
+      <List>
+        {isLoading &&
+          skeletons.map((skeleton) => (
+            <GameCardContainer key={skeleton}>
+              <GameCardSkeleton height={0} />
+            </GameCardContainer>
+          ))}
+        {data.map((data) => (
+          <ListItem key={data.id} paddingY="5px">
+            <HStack>
+              <Image
+                boxSize="32px"
+                borderRadius={8}
+                objectFit="cover"
+                src={getCroppedImageUrl(data.image_background)}
+              />
+              <Button
+                fontWeight={data.id === selectedGenre?.id ? "bold" : "normal"}
+                onClick={() => onSelectGenre(data)}
+                fontSize="lg"
+                variant="link"
+                whiteSpace="normal"
+                textAlign="left"
+              >
+                {data.name}
+              </Button>
+            </HStack>
+          </ListItem>
         ))}
-      {data.map((data) => (
-        <ListItem key={data.id} paddingY="5px">
-          <HStack>
-            <Image
-              boxSize="32px"
-              borderRadius={8}
-              src={getCroppedImageUrl(data.image_background)}
-            />
-            <Button
-              fontWeight={data.id === selectedGenre?.id ? "bold" : "normal"}
-              onClick={() => onSelectGenre(data)}
-              fontSize="lg"
-              variant="link"
-              whiteSpace="normal"
-            >
-              {data.name}
-            </Button>
-          </HStack>
-        </ListItem>
-      ))}
-    </List>
+      </List>
+    </>
   );
 };
 
